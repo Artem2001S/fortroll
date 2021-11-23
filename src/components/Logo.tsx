@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: 'white',
+    fontFamily:'Montserrat-ExtraBold',
     fontSize: 24,
   },
 });

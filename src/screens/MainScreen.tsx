@@ -1,19 +1,44 @@
-import {useNavigation} from '@react-navigation/core';
-import React from 'react';
-import {Dimensions, FlatList, Image, StyleSheet, View} from 'react-native';
+import { useNavigation } from '@react-navigation/core';
+import React, { useState } from 'react';
+import { Dimensions, FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
+import Animated, { FadeIn, FadeInRight, FadeOut, FadeOutLeft, RollInLeft, RollOutLeft, RollOutRight, useAnimatedStyle, useSharedValue, withSpring, ZoomOutDown } from 'react-native-reanimated';
 import Button from '../components/Button';
+import ExpandIcon from '../components/ExpandIcon';
 import Logo from '../components/Logo';
 import MontserratText from '../components/MontserratText';
-import {cases} from '../data';
-import {dark, dark2} from '../style/colors';
+import ToggleIcon from '../components/ToggleIcon';
+import { cases } from '../data';
+import { blue, dark, dark2 } from '../style/colors';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const ITEM_SIZE = width * 0.8;
 const CASE_IMAGE_SIZE = ITEM_SIZE * 0.5;
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+
 const MainScreen = () => {
   const nav = useNavigation();
+  const [expanded, setExpanded] = useState(false);
+  const show = useSharedValue(0);
+
+  const handleClick = () => {
+    show.value = show.value === 0 ? 281 : 0;
+  }
+
+  const as = useAnimatedStyle(() => {
+    return {
+      height: withSpring(show.value, { damping: 20 }),
+      opacity: show.value === 0 ? withSpring(0) : withSpring(1)
+    }
+  })
+
+  const as2 = useAnimatedStyle(() => {
+    return {
+      bottom: show.value === 0 ? withSpring(0) : withSpring(0)
+    }
+  })
+
   return (
     <View style={styles.root}>
       <Logo rootStyle={styles.logo} />
@@ -22,7 +47,7 @@ const MainScreen = () => {
         showsVerticalScrollIndicator={false}
         keyExtractor={(_, index) => index.toString()}
         data={cases}
-        renderItem={({item, index}) => {
+        renderItem={({ item, index }) => {
           return (
             <>
               <View
@@ -50,6 +75,26 @@ const MainScreen = () => {
           );
         }}
       />
+      <AnimatedPressable onPress={() => { setExpanded(!expanded); handleClick(); }} style={[styles.toggle, as2]}>
+        <Animated.View style={[styles.toggleIcon]}>
+          {expanded ? <ToggleIcon /> : <ExpandIcon />}
+        </Animated.View>
+        <Animated.View entering={FadeIn.duration(400)}
+          exiting={FadeIn.duration(400)}
+          style={[styles.content, as]}>
+
+          <MontserratText style={styles.tip}>
+            {`Для того чтобы открыть кейс:
+1. Выберите кейс, который хотите открыть
+2. Нажмите на цену
+3. Оплатите
+4. Откройте кейс
+5. Сделайте скриншот с кодом
+6. Активируйте на сайте`}
+          </MontserratText>
+        </Animated.View>
+
+      </AnimatedPressable>
     </View>
   );
 };
@@ -60,6 +105,35 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  content: {
+    marginTop: 20,
+    width,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
+    backgroundColor: '#131313',
+    height: 261,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20
+  },
+  tip: {
+    color: 'white',
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 15
+  },
+  toggle: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  toggleIcon: {
+    backgroundColor: blue,
+    width: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 40,
+    borderRadius: 26
   },
   logo: {
     alignSelf: 'center',
@@ -73,7 +147,6 @@ const styles = StyleSheet.create({
   caseRoot: {
     width: ITEM_SIZE,
     alignSelf: 'center',
-    // justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 30,
   },
@@ -81,6 +154,8 @@ const styles = StyleSheet.create({
   caseTitle: {
     color: 'white',
     fontSize: 21,
+    fontFamily: 'Montserrat-Bold',
+
     marginTop: 11,
   },
 

@@ -1,7 +1,7 @@
 import React from 'react';
-import {StyleProp, StyleSheet, ViewStyle} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {blue} from '../style/colors';
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { blue } from '../style/colors';
 import MontserratText from './MontserratText';
 
 interface ButtonProps {
@@ -9,7 +9,7 @@ interface ButtonProps {
   rootStyle?: StyleProp<ViewStyle>;
 }
 
-const Button: React.FC<ButtonProps> = ({onPress, children, rootStyle}) => {
+const Button: React.FC<ButtonProps> = ({ onPress, children, rootStyle }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
     backgroundColor: blue,
   },
   title: {
-    color: 'white',
+    color: 'white', fontFamily: 'Montserrat-Bold',
+
     fontSize: 18,
   },
 });
