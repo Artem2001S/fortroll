@@ -1,6 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { RootStackParamList } from '../components/RootNavigation';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, {useCallback, useRef, useState} from 'react';
+import {RootStackParamList} from '../components/RootNavigation';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
   Dimensions,
   StyleSheet,
@@ -10,8 +10,13 @@ import {
   Pressable,
   Linking,
 } from 'react-native';
-import RAnimated, { FadeIn, FadeOut, ZoomInDown, ZoomInUp } from 'react-native-reanimated';
-import { blue, dark, dark2 } from '../style/colors';
+import RAnimated, {
+  FadeIn,
+  FadeOut,
+  ZoomInDown,
+  ZoomInUp,
+} from 'react-native-reanimated';
+import {blue, dark, dark2} from '../style/colors';
 import Logo from '../components/Logo';
 import Button from '../components/Button';
 import Pointer from '../components/Pointer';
@@ -19,7 +24,7 @@ import MontserratText from '../components/MontserratText';
 
 type RollScreenProps = NativeStackScreenProps<RootStackParamList, 'Roll'>;
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ROULETTE_CONTAINER_WIDTH = width - 60;
 
@@ -42,12 +47,12 @@ function rand(min: number, max: number, step: number) {
   return rand;
 }
 
-const IS_PRICE_MODE = true;
+const IS_PRICE_MODE = false;
 
 const ROULETTE_DIAMETER = ROULETTE_CONTAINER_WIDTH - 40;
 
-const RollScreen: React.FC<RollScreenProps> = ({ route }) => {
-  const { reward, code, price } = route.params;
+const RollScreen: React.FC<RollScreenProps> = ({route}) => {
+  const {reward, code, price} = route.params;
   const rotateAnim = useRef(new Animated.Value(0)).current;
 
   const [result, setResult] = useState<boolean | undefined>(undefined);
@@ -55,7 +60,7 @@ const RollScreen: React.FC<RollScreenProps> = ({ route }) => {
 
   const handleButtonPress = useCallback(() => {
     if (IS_PRICE_MODE) {
-      Linking.openURL('https://lootpay.ru/payment/')
+      Linking.openURL('https://lootpay.ru/payment/');
       return;
     }
     if (rotating) return;
@@ -88,7 +93,6 @@ const RollScreen: React.FC<RollScreenProps> = ({ route }) => {
 
   return (
     <View style={styles.root}>
-
       <Logo rootStyle={styles.logo} />
       <View style={styles.container}>
         <View style={styles.pointer}>
@@ -98,7 +102,7 @@ const RollScreen: React.FC<RollScreenProps> = ({ route }) => {
           style={[
             styles.circleRoot,
             {
-              transform: [{ rotate: spin }],
+              transform: [{rotate: spin}],
             },
           ]}>
           <MontserratText style={[styles.text, styles.textTop]}>
@@ -127,19 +131,26 @@ const RollScreen: React.FC<RollScreenProps> = ({ route }) => {
       </View>
       {result !== undefined && (
         <View style={styles.modal}>
-          <RAnimated.View entering={FadeIn.duration(400)} exiting={FadeOut.duration(400)} style={styles.modalWindow}>
+          <RAnimated.View
+            entering={FadeIn.duration(400)}
+            exiting={FadeOut.duration(400)}
+            style={styles.modalWindow}>
             <MontserratText style={styles.modalText}>
               {result === true ? code : 'Не повезло'}
             </MontserratText>
-            <Button onPress={() => {
-              setResult(undefined)
-              Animated.timing(rotateAnim, {
-                toValue: 0,
-                duration: 0,
-                useNativeDriver: true,
-              }).start();
-              setRotating(false);
-            }} rootStyle={styles.modalBtn}>{'Ок'}</Button>
+            <Button
+              onPress={() => {
+                setResult(undefined);
+                Animated.timing(rotateAnim, {
+                  toValue: 0,
+                  duration: 0,
+                  useNativeDriver: true,
+                }).start();
+                setRotating(false);
+              }}
+              rootStyle={styles.modalBtn}>
+              {'Ок'}
+            </Button>
           </RAnimated.View>
         </View>
       )}
@@ -183,7 +194,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
-  btn: { marginTop: 50 },
+  btn: {marginTop: 50},
   container: {
     width: ROULETTE_CONTAINER_WIDTH,
     backgroundColor: dark2,
@@ -201,7 +212,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: 'white', fontFamily: 'Montserrat-Bold',
+    color: 'white',
+    fontFamily: 'Montserrat-Bold',
 
     position: 'absolute',
     fontSize: 23,
@@ -221,7 +233,7 @@ const styles = StyleSheet.create({
   },
   textBottom: {
     bottom: 15,
-    transform: [{ rotate: '180deg' }],
+    transform: [{rotate: '180deg'}],
   },
   circleSmallest: {
     position: 'absolute',
@@ -258,5 +270,5 @@ const styles = StyleSheet.create({
     borderRadius: width,
     backgroundColor: '#13315f',
   },
-  logo: { marginBottom: 57, marginTop: 57 },
+  logo: {marginBottom: 57, marginTop: 57},
 });

@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '11.0'
 
-target 'fortroll' do
+target 'fortrolll' do
   config = use_native_modules!
 
   use_react_native!(
@@ -12,7 +12,7 @@ target 'fortroll' do
     :hermes_enabled => false
   )
 
-  target 'fortrollTests' do
+  target 'fortrolllTests' do
     inherit! :complete
     # Pods for testing
   end
